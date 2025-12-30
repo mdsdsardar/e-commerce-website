@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Sandisk",
+    "price": "65",
+    "description": "This is memory card not pendrive",
+    "ratings": "5",
+    "images": [
+      {
+        "public_id": "prod-1232524545345dfg",
+        "url": "cloudinaryurlforthewin"
+      }
+    ],
+    "category": "Electronics",
+    "seller": "Saad",
+    "stock": "50",
+    "numOfReviews": "32",
+    "reviews": []
+  },
+  {
+    "name": "Samsung",
+    "price": "567",
+    "description": "This is a pendrive",
+    "ratings": "9",
+    "images": [
+      {
+        "public_id": "prod-1232524545345dfg",
+        "url": "cloudinaryurlforthewin"
+      }
+    ],
+    "category": "Electronics",
+    "seller": "Saad",
+    "stock": "43",
+    "numOfReviews": "3",
+    "reviews": []
+  },
+  {
+    "name": "Hp",
+    "price": "665",
+    "description": "This is a laptop",
+    "ratings": "9",
+    "images": [
+      {
+        "public_id": "prod-1232524545345dfg",
+        "url": "cloudinaryurlforthewin"
+      }
+    ],
+    "category": "Laptop",
+    "seller": "Md",
+    "stock": "5",
+    "numOfReviews": "2",
+    "reviews": []
+  }
+]
