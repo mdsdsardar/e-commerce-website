@@ -1,21 +1,22 @@
+// const dotenv = require("dotenv");
+// dotenv.config({ path: "backend/config/config.env" });
 const express = require("express");
 const path = require("path");
-const productRouter = require("./routes/product");
-const { errorMiddleware } = require("./middlewares/errors");
-const userRouter = require("./routes/user");
 const cookieParser = require("cookie-parser");
-const orderRouter = require("./routes/order");
-const app = express();
 const fileUpload = require("express-fileupload");
-const paymentRouter = require("./routes/payment");
-const dotenv = require("dotenv");
-dotenv.config({ path: "backend/config/config.env" });
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.set("query parser", "extended");
-app.use(cookieParser());
-app.use(fileUpload());
+const productRouter = require("./routes/product");
+const userRouter = require("./routes/user");
+const orderRouter = require("./routes/order");
+const paymentRouter = require("./routes/payment");
+const { errorMiddleware } = require("./middlewares/errors");
+
+const app = express(); //initilize express for routing.
+app.use(express.json({ limit: "10kb" })); //pass incoming JSON data.
+app.use(express.urlencoded({ extended: true })); //parse html form into JS objects.
+app.set("query parser", "extended"); //Controls how URL query strings {gte & lte} are parsed.
+app.use(cookieParser()); //Stored cookie is req.cookie
+app.use(fileUpload()); //media upload, now multer is better
 
 app.use("/api/v1", productRouter);
 app.use("/api/v1", userRouter);

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const connectToDatabase = async () => {
   try {
     await mongoose.connect(
-      process.env.DB_URL || "mongodb://localhost:27017/shopIT"
+      process.env.DB_LOCAL_URL || "mongodb://localhost:27017/shopIT"
     );
     console.log("DB Connected Successfully.");
   } catch (error) {

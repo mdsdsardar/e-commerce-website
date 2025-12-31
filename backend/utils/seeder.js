@@ -19,3 +19,7 @@ const seedProducts = async () => {
 };
 
 seedProducts();
+
+//"seeder": "node backend/utils/seeder.js" [in package.json]
+//this is for feeding bulk data to our backend for testing purpose.
+//seeder.js and data folder are part of this practise.
