@@ -13,6 +13,7 @@ import CheckOutSteps from "./checkOutSteps";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { createOrder, clearError } from "../../slices/orderSlice";
+import { clearCart } from "../../slices/cartSlices";
 
 const options = {
   style: {
@@ -87,6 +88,7 @@ const Payment = () => {
             status: result.paymentIntent.status,
           };
           dispatch(createOrder(order));
+          dispatch(clearCart());
           navigate("/success");
         } else {
           toast.error("There is some issue while payment proccessing.");
