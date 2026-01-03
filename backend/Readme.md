@@ -15,11 +15,12 @@ catchAsyncErrors: It is wrapper use to wrap function, It'll prevent app from cra
 ErrorHandler: very useful to send expected error of 4xx and 5xx. just provide statuscode & message and it'll capture stack trace by itself. {Expected} Both send data to global error MW
 error: Global error handler to capture all kind of error, and we will send these error to frontend differently depends on dev/prod env. initialise it on app.js file.
 
-********************** product.js/productController.js **********************
+********************** user.js/userController.js **********************
 ===> userRouter.route("/register").post(registerUser)
 Fetch name, email & password from body, check if all feilds are filled, email is new or not.
 Everytime pass. is changed it will be encrypted before saving it into DB, as per our model design.
-Images -----> Pending,
+We will fetch the image from body, upload it into avatar folder and store the result in result var
+Then we will fetch public ID and secure url from result var, and store it in avatar section in DB.
 Then create user and send the user, statusCode and res to jwtToken utils file.
 ********************** utils/jwtToken.js **********************
 get token from user.getJwtToken(), which will sign token with id, fetch expirydate from env file.
@@ -52,7 +53,8 @@ Fetch userInfo and enable select option of password, then first check old passwo
 
 ===> userRouter.route("/me/update").put(isAuthenticatedUser, updateProfile)
 Fetch the updated field like name & email, then use req.user.id and update them in DB.
-Avatar - Pending.
+Check if avatar is uploaded, If yes then fetch user Info,delete the old avatar by using public_id.
+then upload the recent avatar, add the public_id & secure_url data in new userData.
 
 ===> userRouter.route("/logout").get(logOut)
 We will modify the token from cookie of response. modify expiry date to now.
@@ -69,13 +71,14 @@ Fetch if the id from url and search it in DB.
 Fetch the latest name, email & role from body and modify it by fetching id from url
 
 ===> userRouter.route("/admin/user/:id").delete(isAuthenticatedUser, authorizedRole("admin"), deleteUser)
-avatar - pending
+Fetch public_id from user info, then delete it from cloudinary.
 Find user by id and delete it from DB.
 
 
 ********************** product.js/productController.js **********************
 ===> productRouter.route("/product/new").post(isAuthenticatedUser, authorizedRole("admin"), newProduct);
-Images -----> Pending,
+We will check if image is single or multiple? If single it'll be an string directly push it into array, if it is multiple no need to push just assign it.
+Now upload all the image one by one in cloudinary & capture it's public_id & secure_url and paste it in imagesLink, which will be uploaded into DB. DO this ops for all the images using for loop.
 Fetch all the info from body, then update userId in body from req.user.id. and then create the product from the req.body.
 
 ===> productRouter.route("/products").get(getProducts)
@@ -92,11 +95,11 @@ Fetch single product details from DB using url ID and send it through a response
 
 ===> productRouter.route("/product/update/:id").put(isAuthenticatedUser, authorizedRole("admin"), updateProduct)
 Fetch the current product details from DB, and check if product is found or not,
-image - pending
+We will check if the images are uploaded? If yes delete all the old images and upload the new images and create new array of imageLinks and fill them with recently uploaded url
 Fetch the updated field from body and modify it on DB using url ID.
 
 ===> productRouter.route("/product/delete/:id").delete(isAuthenticatedUser, authorizedRole("admin"), deleteProduct)
-Find and delete product from DB using provided ID, Image - pending.
+Find and delete product from DB using provided ID, delete the images just like update method.
 
 ===> productRouter.route("/review").put(isAuthenticatedUser, createProductReview)
 We are fetching productID, comment, rating from body, although we dont need to type prodID from UI
@@ -142,7 +145,6 @@ Then we are sending client secret {Frontend temporary token (client_secret)} to 
 
 ===> paymentRouter.route("/stripeapi").get(isAuthenticatedUser, sendStripeApi)
 Send stripe API key to FrontEnd. with these 2 methods frontend with complete the payment.
-
 
 
 

@@ -128,10 +128,10 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
 
 //Get currently logged In user => /api/v1/me
 exports.getUserProfile = catchAsyncError(async (req, res, next) => {
-  const user = await User.findById(req.user.id); //req.user have userinfo, no need for DB calls
+  // const user = await User.findById(req.user.id); //req.user have userinfo, no need for DB calls
   res.status(200).json({
     success: true,
-    user, //can be user: req.user
+    user: req.user, //can be user: req.user
   });
 });
 
