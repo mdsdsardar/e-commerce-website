@@ -69,7 +69,7 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
   }
 
   //Get reset token.
-  const resetToken = user.getResetPasswordToken();
+  const resetToken = user.getResetPasswordToken(); //it exists
   await user.save({ validateBeforeSave: false });
   // create reset password URL.
   // const resetUrl = `${req.protocol}://${req.get(
@@ -128,10 +128,10 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
 
 //Get currently logged In user => /api/v1/me
 exports.getUserProfile = catchAsyncError(async (req, res, next) => {
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.user.id); //req.user have userinfo, no need for DB calls
   res.status(200).json({
     success: true,
-    user,
+    user, //can be user: req.user
   });
 });
 
@@ -186,6 +186,7 @@ exports.logOut = catchAsyncError(async (req, res, next) => {
   res.cookie("token", null, {
     expires: new Date(Date.now()),
     httpOnly: true,
+    sameSite: "lax",
   });
   res.status(200).json({
     success: true,
@@ -225,7 +226,7 @@ exports.updateUserProfile = catchAsyncError(async (req, res, next) => {
     email: req.body.email,
     role: req.body.role,
   };
-  //update avatar. - pending
+  //update avatar. - pending {Don't think so this is needed.}
   const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
     new: true,
     runValidators: true,

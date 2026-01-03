@@ -147,7 +147,7 @@ exports.createProductReview = catchAsyncError(async (req, res, next) => {
   const product = await Product.findById(productId);
   const isReviewed = product.reviews.find(
     (r) => r.user.toString() === req.user._id.toString()
-  );
+  ); //can't we just copy the object ID, and then modify it using that ID?
   if (isReviewed) {
     product.reviews.forEach((review) => {
       if (review.user.toString() === req.user._id.toString()) {
