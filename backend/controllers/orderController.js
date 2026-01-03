@@ -14,6 +14,26 @@ exports.newOrder = catchAsyncError(async (req, res, next) => {
     totalPrice,
     paymentInfo,
   } = req.body;
+  // Validate and deduct stock
+  for (const item of orderItems) {
+    const product = await Product.findById(item.product);
+
+    if (!product) {
+      return next(new ErrorHandler(`Product not found`, 404));
+    }
+
+    if (product.stock < item.quantity) {
+      return next(
+        new ErrorHandler(
+          `Insufficient stock for ${product.name}. Only ${product.stock} available`,
+          400
+        )
+      );
+    }
+
+    product.stock -= item.quantity;
+    await product.save({ validateBeforeSave: false });
+  }
   const order = await Order.create({
     orderItems,
     shippingInfo,
@@ -80,9 +100,9 @@ exports.updateOrders = catchAsyncError(async (req, res, next) => {
   if (order.orderStatus === "Delivered") {
     return next(new ErrorHandler("You have already delivered this order", 400));
   }
-  order.orderItems.forEach(async (item) => {
-    await updateStock(item.product, item.quantity);
-  });
+  // order.orderItems.forEach(async (item) => {
+  //   await updateStock(item.product, item.quantity);
+  // });
   order.orderStatus = req.body.orderStatus;
   order.deliveredAt = Date.now();
   await order.save();
@@ -92,11 +112,11 @@ exports.updateOrders = catchAsyncError(async (req, res, next) => {
   });
 });
 
-async function updateStock(id, quantity) {
-  const product = await Product.findById(id);
-  product.stock = product.stock - quantity;
-  await product.save({ validateBeforeSave: false });
-}
+// async function updateStock(id, quantity) {
+//   const product = await Product.findById(id);
+//   product.stock = product.stock - quantity;
+//   await product.save({ validateBeforeSave: false });
+// }
 
 //Delete order => /api/v1/admin/order/:id
 exports.deleteOrder = catchAsyncError(async (req, res, next) => {
