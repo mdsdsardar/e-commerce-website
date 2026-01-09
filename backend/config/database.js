@@ -10,5 +10,5 @@ const connectToDatabase = async () => {
     console.log("DB Connection Failed:", error.message); //we need to close the server here.
   }
 };
-
+connectToDatabase();
 module.exports = connectToDatabase;

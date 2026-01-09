@@ -10,14 +10,15 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { allOrders } from "../../slices/orderSlice";
 import { allUsers } from "../../slices/authSlice";
+import { useState } from "react";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.products);
-  const { loading, totalAmount, allOrder } = useSelector(
+  const { products, totalProducts } = useSelector((state) => state.products);
+  const { loading, totalAmount, totalOrder, allOrder } = useSelector(
     (state) => state.order
   );
-  const { allUser } = useSelector((state) => state.auth);
+  const { allUser, totalUsers } = useSelector((state) => state.auth);
 
   let outOfStock = 0;
   products.forEach((product) => {
@@ -26,9 +27,11 @@ const Dashboard = () => {
     }
   });
   useEffect(() => {
-    dispatch(getAdminProducts());
-    dispatch(allOrders());
-    dispatch(allUsers());
+    const currentPage = 0;
+    const resPerPage = 5;
+    dispatch(getAdminProducts({ resPerPage, currentPage }));
+    dispatch(allOrders({ resPerPage, currentPage }));
+    dispatch(allUsers({ resPerPage, currentPage }));
   }, [dispatch]);
   return (
     <Fragment>
@@ -62,7 +65,7 @@ const Dashboard = () => {
                     <div className="card-body">
                       <div className="text-center card-font-size">
                         Products
-                        <br /> <b>{products && products.length}</b>
+                        <br /> <b>{totalProducts && totalProducts}</b>
                       </div>
                     </div>
                     <Link
@@ -82,7 +85,7 @@ const Dashboard = () => {
                     <div className="card-body">
                       <div className="text-center card-font-size">
                         Orders
-                        <br /> <b>{allOrder && allOrder.length}</b>
+                        <br /> <b>{totalOrder && totalOrder}</b>
                       </div>
                     </div>
                     <Link
@@ -102,7 +105,7 @@ const Dashboard = () => {
                     <div className="card-body">
                       <div className="text-center card-font-size">
                         Users
-                        <br /> <b>{allUser && allUser.length}</b>
+                        <br /> <b>{totalUsers && totalUsers}</b>
                       </div>
                     </div>
                     <Link

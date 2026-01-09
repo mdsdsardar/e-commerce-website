@@ -12,16 +12,24 @@ import {
   deleteOrder,
   deleteOrderReset,
 } from "../../slices/orderSlice";
+import { useState } from "react";
 
 const OrderList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, allOrder, isDeleted } = useSelector(
+  const { loading, error, allOrder, totalOrder, isDeleted } = useSelector(
     (state) => state.order
   );
-
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0, // MUI DataGrid uses 0-based indexing
+    pageSize: 5, // rows per page
+  });
   useEffect(() => {
-    dispatch(allOrders());
+    const currentPage = paginationModel.page + 1; // Convert to 1-based for backend
+    const resPerPage = paginationModel.pageSize;
+    console.log(currentPage);
+    
+    dispatch(allOrders({ resPerPage, currentPage }));
     if (error) {
       toast.error(error);
       dispatch(clearError());
@@ -31,7 +39,7 @@ const OrderList = () => {
       navigate("/admin/orders");
       dispatch(deleteOrderReset());
     }
-  }, [dispatch, toast, error, isDeleted]);
+  }, [dispatch, paginationModel, toast, error, isDeleted]);
 
   const deleteOrderHandler = (id) => {
     dispatch(deleteOrder(id));
@@ -40,7 +48,7 @@ const OrderList = () => {
   if (!Array.isArray(allOrder) || allOrder.length === 0) {
     return (
       <div>
-        <h1 className="mt-5">Products</h1>
+        <h1 className="mt-5">Orders</h1>
         <p>No Orders found.</p>
       </div>
     );
@@ -132,11 +140,12 @@ const OrderList = () => {
                   <DataGrid
                     rows={rows}
                     columns={columns}
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={setPaginationModel}
                     autoHeight
                     pageSizeOptions={[5, 10, 25]}
-                    initialState={{
-                      pagination: { paginationModel: { pageSize: 10 } },
-                    }}
+                    paginationMode="server" // Important for server-side pagination
+                    rowCount={totalOrder} // Total number of products from backend
                     disableRowSelectionOnClick
                     sx={{
                       "& .MuiDataGrid-row": {

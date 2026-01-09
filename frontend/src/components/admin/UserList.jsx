@@ -12,6 +12,7 @@ import {
   deleteUser,
   deleteUserReset,
 } from "../../slices/authSlice";
+import { useState } from "react";
 
 const UserList = () => {
   const dispatch = useDispatch();
@@ -21,9 +22,16 @@ const UserList = () => {
     error,
     allUser,
     isDeleted,
+    totalUsers,
   } = useSelector((state) => state.auth);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0, // MUI DataGrid uses 0-based indexing
+    pageSize: 5, // rows per page
+  });
   useEffect(() => {
-    dispatch(allUsers());
+    const currentPage = paginationModel.page + 1; // Convert to 1-based for backend
+    const resPerPage = paginationModel.pageSize;
+    dispatch(allUsers({resPerPage, currentPage}));
 
     if (error) {
       toast.error(error);
@@ -34,7 +42,7 @@ const UserList = () => {
       navigate("/admin/users");
       dispatch(deleteUserReset());
     }
-  }, [dispatch, error, isDeleted]);
+  }, [dispatch, paginationModel, error, isDeleted]);
 
   const deleteUserHandler = (id) => {
     dispatch(deleteUser(id));
@@ -135,10 +143,14 @@ const UserList = () => {
                   <DataGrid
                     rows={rows}
                     columns={columns}
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={setPaginationModel}
                     autoHeight
                     pageSizeOptions={[5, 10, 25]}
+                    paginationMode="server" // Important for server-side pagination
+                    rowCount={totalUsers} // Total number of products from backend
                     initialState={{
-                      pagination: { paginationModel: { pageSize: 10 } },
+                      pagination: { paginationModel: { pageSize: 5 } },
                     }}
                     disableRowSelectionOnClick
                     sx={{

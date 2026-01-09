@@ -1,5 +1,5 @@
 const { catchAsyncError } = require("../middlewares/catchAsyncErrors");
-const Product = require("../model/product");
+const Product = require("../model/product.model");
 const APIFeatures = require("../utils/apiFeatures");
 const ErrorHandler = require("../utils/errorHandler");
 const cloudinary = require("cloudinary");
@@ -206,11 +206,18 @@ exports.deleteReview = catchAsyncError(async (req, res, next) => {
 
 //Get all products (Admin only) => /api/v1/admin/products
 exports.getAdminProducts = catchAsyncError(async (req, res, next) => {
-  const products = await Product.find();
-
+  const resPerPage = parseInt(req.query.resperpage) || 10;
+  const apiFeatures = new APIFeatures(Product.find(), req.query).pagination(
+    resPerPage
+  );
+  const totalProducts = await Product.countDocuments(
+    apiFeatures.query.getQuery()
+  );
+  const products = await apiFeatures.query;
   res.status(200).json({
     success: true,
     message: "Sucesfully fetched all product from DB.",
+    totalProducts,
     products,
   });
 });

@@ -1,6 +1,7 @@
 const { catchAsyncError } = require("../middlewares/catchAsyncErrors");
-const Order = require("../model/order");
-const Product = require("../model/product");
+const Order = require("../model/order.model");
+const Product = require("../model/product.model");
+const APIFeatures = require("../utils/apiFeatures");
 const ErrorHandler = require("../utils/errorHandler");
 
 //create new order => /api/v1/order/now
@@ -80,7 +81,15 @@ exports.myOrders = catchAsyncError(async (req, res, next) => {
 
 //Get all the orders (Admin only) => /api/v1/admin/orders/
 exports.allOrders = catchAsyncError(async (req, res, next) => {
-  const orders = await Order.find();
+  const resPerPage = parseInt(req.query.resperpage) || 5;
+  const apiFeatures = new APIFeatures(Order.find(), req.query).pagination(
+    resPerPage
+  );
+  const totalOrder = await Order.countDocuments(
+    apiFeatures.query.getQuery()
+  );
+  const orders = await apiFeatures.query;
+  // const orders = await Order.find();
   let totalAmount = 0;
   orders.forEach((order) => {
     totalAmount += order.totalPrice;
@@ -89,6 +98,7 @@ exports.allOrders = catchAsyncError(async (req, res, next) => {
     success: true,
     totalAmount,
     orders,
+    totalOrder,
   });
 });
 

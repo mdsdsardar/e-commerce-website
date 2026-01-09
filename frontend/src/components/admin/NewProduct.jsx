@@ -68,8 +68,8 @@ const NewProduct = () => {
   };
   const onChange = (e) => {
     const files = Array.from(e.target.files);
-    setImagesPreview([]);
-    setImages([]);
+    // setImagesPreview([]);
+    // setImages([]);
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onload = () => {

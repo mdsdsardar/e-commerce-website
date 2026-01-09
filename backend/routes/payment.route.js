@@ -3,7 +3,7 @@ const { isAuthenticatedUser, authorizedRole } = require("../middlewares/auth");
 const {
   processPayment,
   sendStripeApi,
-} = require("../controllers/paymentController");
+} = require("../controllers/payment.controller");
 const paymentRouter = express.Router();
 
 paymentRouter

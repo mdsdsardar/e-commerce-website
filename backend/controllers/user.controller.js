@@ -1,6 +1,5 @@
 const { catchAsyncError } = require("../middlewares/catchAsyncErrors");
-const user = require("../model/user");
-const User = require("../model/user");
+const User = require("../model/user.model");
 const APIFeatures = require("../utils/apiFeatures");
 const ErrorHandler = require("../utils/errorHandler");
 const sendToken = require("../utils/jwtToken");
@@ -197,11 +196,19 @@ exports.logOut = catchAsyncError(async (req, res, next) => {
 //Admin Routes,
 //Get all users => /api/v1/admin/users
 exports.allUsers = catchAsyncError(async (req, res, next) => {
-  const users = await user.find();
+  const resPerPage = parseInt(req.query.resperpage) || 10;
+  const apiFeatures = new APIFeatures(User.find(), req.query).pagination(
+    resPerPage
+  );
+  const totalUsers = await User.countDocuments(apiFeatures.query.getQuery());
+  const users = await apiFeatures.query;
+
+  // const users = await User.find();
   res.status(200).json({
     success: true,
     message: "Succesfully fetched all users.",
     users,
+    totalUsers,
   });
 });
 

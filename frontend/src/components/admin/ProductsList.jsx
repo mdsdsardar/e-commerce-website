@@ -14,17 +14,30 @@ import {
   resetDeleteProduct,
 } from "../../slices/productSlice";
 import Sidebar from "./Sidebar";
+import { useState } from "react";
 
 const ProductsList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, products } = useSelector((state) => state.products);
+  const { loading, error, products, totalProducts } = useSelector(
+    (state) => state.products
+  );
   const { error: deleteError, isDeleted } = useSelector(
     (state) => state.productDetails
   );
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0, // MUI DataGrid uses 0-based indexing
+    pageSize: 5, // rows per page
+  });
 
+  // Fetch data whenever pagination changes
   useEffect(() => {
-    dispatch(getAdminProducts());
+    const currentPage = paginationModel.page + 1; // Convert to 1-based for backend
+    const resPerPage = paginationModel.pageSize;
+
+    dispatch(getAdminProducts({resPerPage, currentPage}));
+
+    // dispatch(getAdminProducts());
     if (error) {
       toast.error(error);
       dispatch(clearProductErrors());
@@ -38,7 +51,15 @@ const ProductsList = () => {
       navigate("/admin/products");
       dispatch(resetDeleteProduct());
     }
-  }, [dispatch, toast, error, deleteError, isDeleted, navigate]);
+  }, [
+    dispatch,
+    paginationModel,
+    toast,
+    error,
+    deleteError,
+    isDeleted,
+    navigate,
+  ]);
 
   // Ensure orders is an array before mapping
   if (!Array.isArray(products) || products.length === 0) {
@@ -55,7 +76,6 @@ const ProductsList = () => {
     name: product.name,
     price: `$${product.price}`,
     stock: product.stock,
-    // orderId: order._id, // Keep original ID for actions {seems useless}
   }));
 
   const columns = [
@@ -82,16 +102,6 @@ const ProductsList = () => {
       headerName: "Stock",
       flex: 1,
       minWidth: 120,
-      // renderCell: (params) => (
-      //   <p
-      //     style={{
-      //       color: params.value?.includes("Delivered") ? "green" : "red",
-      //       margin: 0,
-      //     }}
-      //   >
-      //     {params.value}
-      //   </p>
-      // ),
     },
     {
       field: "actions",
@@ -139,10 +149,14 @@ const ProductsList = () => {
                   <DataGrid
                     rows={rows}
                     columns={columns}
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={setPaginationModel}
                     autoHeight
                     pageSizeOptions={[5, 10, 25]}
+                    paginationMode="server" // Important for server-side pagination
+                    rowCount={totalProducts} // Total number of products from backend
                     initialState={{
-                      pagination: { paginationModel: { pageSize: 10 } },
+                      pagination: { paginationModel: { pageSize: 5 } },
                     }}
                     disableRowSelectionOnClick
                     sx={{

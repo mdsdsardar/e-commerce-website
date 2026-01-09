@@ -40,13 +40,16 @@ export const getProducts = createAsyncThunk(
 
 export const getAdminProducts = createAsyncThunk(
   "getAdminProducts", // action type prefix
-  async (_, { rejectWithValue }) => {
+  async ({ resPerPage, currentPage }, { rejectWithValue }) => {
     try {
       // Make API call to fetch products
-      const { data } = await axios.get(`/api/v1/admin/products`);
+      const { data } = await axios.get(
+        // `/api/v1/admin/products`
+        `/api/v1/admin/products?resperpage=${resPerPage}&page=${currentPage}`
+      );
       // Log the response to debug
       console.log("API Response:", data);
-      return data.products; // This becomes action.payload on success
+      return data; // This becomes action.payload on success
     } catch (error) {
       // Log error for debugging
       console.error("API Error:", error);
@@ -69,6 +72,7 @@ const productSlice = createSlice({
     error: null,
     productsCount: 0,
     resPerPage: 0,
+    totalProducts: [],
   },
   reducers: {
     // Regular synchronous actions go here
@@ -105,7 +109,8 @@ const productSlice = createSlice({
       })
       .addCase(getAdminProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload;
+        state.products = action.payload.products;
+        state.totalProducts = action.payload.totalProducts;
       })
       .addCase(getAdminProducts.rejected, (state, action) => {
         state.loading = false;

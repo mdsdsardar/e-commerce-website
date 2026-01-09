@@ -82,10 +82,12 @@ export const orderDetails = createAsyncThunk(
 
 export const allOrders = createAsyncThunk(
   "order/allOrders", // action type prefix
-  async (_, { rejectWithValue }) => {
+  async ({ resPerPage, currentPage }, { rejectWithValue }) => {
     try {
       // Make API call to fetch products
-      const { data } = await axios.get(`/api/v1/admin/orders`);
+      const { data } = await axios.get(
+        `/api/v1/admin/orders?resperpage=${resPerPage}&page=${currentPage}`
+      );
       // Log the response to debug
       console.log("API Response:", data);
 
@@ -172,6 +174,7 @@ const orderSlice = createSlice({
     order: [],
     allOrder: [],
     totalAmount: [],
+    totalOrder: [],
     isUpdated: false,
     isDeleted: false,
   },
@@ -239,6 +242,7 @@ const orderSlice = createSlice({
         state.loading = false;
         state.allOrder = action.payload.orders;
         state.totalAmount = action.payload.totalAmount;
+        state.totalOrder = action.payload.totalOrder;
         state.error = null;
       })
       .addCase(allOrders.rejected, (state, action) => {

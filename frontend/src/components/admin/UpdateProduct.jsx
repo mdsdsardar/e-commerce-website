@@ -85,9 +85,9 @@ const UpdateProduct = () => {
   const onChange = (e) => {
     const files = Array.from(e.target.files);
 
-    // Clear only the preview and new images, NOT oldImages
-    setImagesPreview([]);
-    setImages([]);
+    // // Clear only the preview and new images, NOT oldImages
+    // setImagesPreview([]);
+    // setImages([]);
 
     files.forEach((file) => {
       const reader = new FileReader();

@@ -96,15 +96,17 @@ export const loadUser = createAsyncThunk(
 
 export const allUsers = createAsyncThunk(
   "user/allUsers", // action type prefix
-  async (_, { rejectWithValue }) => {
+  async ({ resPerPage, currentPage }, { rejectWithValue }) => {
     try {
       // Make API call to fetch products
-      const { data } = await axios.get("/api/v1/admin/users");
+      const { data } = await axios.get(
+        `/api/v1/admin/users?resperpage=${resPerPage}&page=${currentPage}`
+      );
 
       // Log the response to debug
       console.log("API Response:", data);
 
-      return data.users; // This becomes action.payload on success
+      return data; // This becomes action.payload on success
     } catch (error) {
       // Log error for debugging
       console.error("API Error:", error);
@@ -238,6 +240,7 @@ const authSlice = createSlice({
     error: null,
     user: null,
     allUser: [],
+    totalUsers: [],
     userLoaded: false,
     usersLoading: false,
     isUpdated: false,
@@ -338,7 +341,8 @@ const authSlice = createSlice({
       .addCase(allUsers.fulfilled, (state, action) => {
         state.usersLoading = false;
         state.error = null;
-        state.allUser = action.payload;
+        state.allUser = action.payload.users;
+        state.totalUsers = action.payload.totalUsers;
       })
       .addCase(allUsers.rejected, (state, action) => {
         state.usersLoading = false;
@@ -390,5 +394,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { deleteUserReset, updateUserReset, clearError } = authSlice.actions;
+export const { deleteUserReset, updateUserReset, clearError } =
+  authSlice.actions;
 export const authReducer = authSlice.reducer;

@@ -1,5 +1,9 @@
 const ErrorHandler = require("../utils/errorHandler");
 
+exports.notFoundMiddleware = (req, res, next) => {
+  return next(new ErrorHandler(`Not Found - ${req.originalUrl}`, 404));
+};
+
 exports.errorMiddleware = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   if (process.env.NODE_ENV === "DEVELOPMENT") {
@@ -12,6 +16,13 @@ exports.errorMiddleware = (err, req, res, next) => {
   } else {
     let error = { ...err };
     error.message = err.message;
+    // Mongoose validation error
+    if (err.name === "ValidationError") {
+      const message = Object.values(err.errors)
+        .map((val) => val.message)
+        .join(", ");
+      error = new ErrorHandler(message, 400);
+    }
     //wrong Mongoose Object ID Error.
     if (err.name === "CastError") {
       const message = `Resource not found. Invalid: ${err.path}`;
