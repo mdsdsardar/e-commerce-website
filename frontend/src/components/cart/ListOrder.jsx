@@ -1,12 +1,12 @@
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addItemToCart, removeFromCart } from "../../slices/cartSlices";
+import { addItemToCart, removeFromCart } from "../../slices/cart.slice";
 import MetaData from "../layout/MetaData";
 import { Link } from "react-router-dom";
 // import { MDBDataTable } from "mdbreact";
 import Loader from "../layout/Loader";
 import toast from "react-hot-toast";
-import { clearError, myOrder } from "../../slices/orderSlice";
+import { clearError, myOrder } from "../../slices/order.slice";
 import { DataGrid } from "@mui/x-data-grid";
 
 const ListOrders = () => {

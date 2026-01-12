@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MetaData from "../layout/MetaData";
 import { useNavigate } from "react-router-dom";
 import { countries } from "countries-list";
-import { saveShippingInfo } from "../../slices/cartSlices";
+import { saveShippingInfo } from "../../slices/cart.slice";
 import CheckOutSteps from "./checkOutSteps";
 
 const Shipping = () => {

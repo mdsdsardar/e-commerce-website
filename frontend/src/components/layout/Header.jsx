@@ -3,7 +3,7 @@ import Search from "./Search";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { logoutUser } from "../../slices/authSlice";
+import { logoutUser } from "../../slices/auth.slice";
 
 const Header = () => {
   const dispatch = useDispatch();

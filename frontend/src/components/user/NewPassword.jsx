@@ -7,7 +7,7 @@ import {
   clearError,
   forgotPassword,
   resetPassword,
-} from "../../slices/userSlice";
+} from "../../slices/user.slice";
 
 export const NewPassword = () => {
   const { token } = useParams();

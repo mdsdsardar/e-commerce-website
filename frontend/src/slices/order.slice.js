@@ -82,7 +82,7 @@ export const orderDetails = createAsyncThunk(
 
 export const allOrders = createAsyncThunk(
   "order/allOrders", // action type prefix
-  async ({ resPerPage, currentPage }, { rejectWithValue }) => {
+  async ({ resPerPage = 5, currentPage = 1 } = {}, { rejectWithValue }) => {
     try {
       // Make API call to fetch products
       const { data } = await axios.get(
@@ -253,6 +253,7 @@ const orderSlice = createSlice({
       .addCase(updateOrder.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.isUpdated = false;
       })
       .addCase(updateOrder.fulfilled, (state, action) => {
         state.loading = false;
@@ -262,11 +263,13 @@ const orderSlice = createSlice({
       .addCase(updateOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.isUpdated = false;
       })
       // ========== Delete Orders Admin Only==========
       .addCase(deleteOrder.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.isDeleted = false;
       })
       .addCase(deleteOrder.fulfilled, (state, action) => {
         state.loading = false;
@@ -276,6 +279,7 @@ const orderSlice = createSlice({
       .addCase(deleteOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.isDeleted = false;
       });
   },
 });

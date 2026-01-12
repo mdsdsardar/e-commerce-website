@@ -11,7 +11,7 @@ import {
   clearError,
   deleteOrder,
   deleteOrderReset,
-} from "../../slices/orderSlice";
+} from "../../slices/order.slice";
 import { useState } from "react";
 
 const OrderList = () => {

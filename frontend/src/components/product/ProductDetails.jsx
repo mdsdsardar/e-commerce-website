@@ -6,12 +6,12 @@ import {
   getProductDetails,
   newReview,
   resetReview,
-} from "../../slices/productSlice";
+} from "../../slices/product.slice";
 import toast from "react-hot-toast";
 import Loader from "../layout/Loader";
 import MetaData from "../layout/MetaData";
 import { Carousel } from "react-bootstrap";
-import { addItemToCart } from "../../slices/cartSlices";
+import { addItemToCart } from "../../slices/cart.slice";
 import ListReviews from "../review/ListReviews";
 
 // const ProductDetails = ({ match }) => {

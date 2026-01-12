@@ -9,7 +9,7 @@ import {
   updateProduct,
   resetUpdateProduct,
   getProductDetails,
-} from "../../slices/productSlice";
+} from "../../slices/product.slice";
 import Sidebar from "./Sidebar";
 
 const UpdateProduct = () => {

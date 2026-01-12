@@ -8,7 +8,7 @@ import {
   clearProductDetailsErrors,
   newProduct,
   resetReview,
-} from "../../slices/productSlice";
+} from "../../slices/product.slice";
 import Sidebar from "./Sidebar";
 
 const NewProduct = () => {

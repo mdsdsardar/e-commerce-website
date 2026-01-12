@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import MetaData from "../layout/MetaData";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { createUser, getAuth, loadUser } from "../../slices/authSlice";
-import { updateUser, resetUpdate, clearError } from "../../slices/userSlice";
+import { createUser, getAuth, loadUser } from "../../slices/auth.slice";
+import { updateUser, resetUpdate, clearError } from "../../slices/user.slice";
 
 const UpdateProfile = () => {
   const navigate = useNavigate();

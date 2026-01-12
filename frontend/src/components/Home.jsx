@@ -1,5 +1,9 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { getProducts, clearProductErrors } from "../slices/productSlice";
+import {
+  getProducts,
+  clearProductErrors,
+  setLoading,
+} from "../slices/product.slice";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import MetaData from "./layout/MetaData";
@@ -51,8 +55,8 @@ const Home = () => {
       toast.error(error); // 🔥 replacement
       return;
     }
+    dispatch(setLoading(true));
     dispatch(getProducts({ keyword, currentPage, price, category, rating }));
-    // // Cleanup: clear errors when component unmounts
     // return () => {
     //   dispatch(clearErrors());
     // };

@@ -12,8 +12,8 @@ import {
 import CheckOutSteps from "./checkOutSteps";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { createOrder, clearError } from "../../slices/orderSlice";
-import { clearCart } from "../../slices/cartSlices";
+import { createOrder, clearError } from "../../slices/order.slice";
+import { clearCart } from "../../slices/cart.slice";
 
 const options = {
   style: {

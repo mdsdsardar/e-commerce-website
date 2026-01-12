@@ -96,7 +96,7 @@ export const loadUser = createAsyncThunk(
 
 export const allUsers = createAsyncThunk(
   "user/allUsers", // action type prefix
-  async ({ resPerPage, currentPage }, { rejectWithValue }) => {
+  async ({ resPerPage = 5, currentPage = 1 } = {}, { rejectWithValue }) => {
     try {
       // Make API call to fetch products
       const { data } = await axios.get(
@@ -263,7 +263,7 @@ const authSlice = createSlice({
       // ========== LOGIN ==========
       .addCase(getAuth.pending, (state) => {
         state.loading = true;
-        state.isAuthenticated = false;
+        // state.isAuthenticated = false;
         state.error = null;
       })
       .addCase(getAuth.fulfilled, (state, action) => {
@@ -278,12 +278,13 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
         state.error = action.payload;
+        state.userLoaded = false;
       })
 
       // ========== REGISTER ==========
       .addCase(createUser.pending, (state) => {
         state.loading = true;
-        state.isAuthenticated = false;
+        // state.isAuthenticated = false;
         state.error = null;
       })
       .addCase(createUser.fulfilled, (state, action) => {
@@ -298,6 +299,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
         state.error = action.payload;
+        state.userLoaded = false;
       })
 
       // ========== LOAD USER ==========
@@ -318,7 +320,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
         state.error = action.payload;
-        state.userLoaded = true;
+        state.userLoaded = false;
       })
 
       // ========== LOGOUT ==========
@@ -327,7 +329,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
         state.error = null;
-        state.userLoaded = true;
+        state.userLoaded = false;
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;
@@ -351,6 +353,7 @@ const authSlice = createSlice({
       // ========== Update User - Admin Only ==========
       .addCase(updateUser.pending, (state) => {
         state.usersLoading = true;
+        state.isUpdated = false;
         state.error = null;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
@@ -361,6 +364,7 @@ const authSlice = createSlice({
       .addCase(updateUser.rejected, (state, action) => {
         state.usersLoading = false;
         state.error = action.payload;
+        state.isUpdated = false;
       })
       // ========== Get USER - Admin ==========
       .addCase(getUser.pending, (state) => {
@@ -381,6 +385,7 @@ const authSlice = createSlice({
       .addCase(deleteUser.pending, (state) => {
         state.usersLoading = true;
         state.error = null;
+        state.isDeleted = false;
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
         state.usersLoading = false;
@@ -390,6 +395,7 @@ const authSlice = createSlice({
       .addCase(deleteUser.rejected, (state, action) => {
         state.usersLoading = false;
         state.error = action.payload;
+        state.isDeleted = false;
       });
   },
 });

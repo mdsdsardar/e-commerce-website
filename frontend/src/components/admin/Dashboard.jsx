@@ -6,10 +6,10 @@ import Sidebar from "./Sidebar";
 import {
   clearProductErrors,
   getAdminProducts,
-} from "../../slices/productSlice";
+} from "../../slices/product.slice";
 import { useDispatch, useSelector } from "react-redux";
-import { allOrders } from "../../slices/orderSlice";
-import { allUsers } from "../../slices/authSlice";
+import { allOrders } from "../../slices/order.slice";
+import { allUsers } from "../../slices/auth.slice";
 import { useState } from "react";
 
 const Dashboard = () => {
@@ -27,11 +27,9 @@ const Dashboard = () => {
     }
   });
   useEffect(() => {
-    const currentPage = 0;
-    const resPerPage = 5;
-    dispatch(getAdminProducts({ resPerPage, currentPage }));
-    dispatch(allOrders({ resPerPage, currentPage }));
-    dispatch(allUsers({ resPerPage, currentPage }));
+    dispatch(getAdminProducts());
+    dispatch(allOrders());
+    dispatch(allUsers());
   }, [dispatch]);
   return (
     <Fragment>

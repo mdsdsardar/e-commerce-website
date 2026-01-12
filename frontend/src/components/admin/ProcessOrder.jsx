@@ -10,7 +10,7 @@ import {
   clearError,
   orderDetails,
   updateOrderReset,
-} from "../../slices/orderSlice";
+} from "../../slices/order.slice";
 
 const ProcessOrder = () => {
   const navigate = useNavigate();

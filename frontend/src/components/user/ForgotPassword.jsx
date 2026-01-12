@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MetaData from "../layout/MetaData";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { clearError, forgotPassword } from "../../slices/userSlice";
+import { clearError, forgotPassword } from "../../slices/user.slice";
 export const ForgotPassword = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

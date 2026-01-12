@@ -10,7 +10,7 @@ import {
   loadUser,
   updateUser,
   updateUserReset,
-} from "../../slices/authSlice";
+} from "../../slices/auth.slice";
 import Sidebar from "./Sidebar";
 
 const UpdateUser = () => {

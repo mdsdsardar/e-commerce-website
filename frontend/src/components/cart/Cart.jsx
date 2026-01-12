@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addItemToCart, removeFromCart } from "../../slices/cartSlices";
+import { addItemToCart, removeFromCart } from "../../slices/cart.slice";
 import MetaData from "../layout/MetaData";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";

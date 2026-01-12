@@ -7,7 +7,7 @@ import {
   resetUpdate,
   clearError,
   updatePassword,
-} from "../../slices/userSlice";
+} from "../../slices/user.slice";
 
 const UpdatePassword = () => {
   const navigate = useNavigate();

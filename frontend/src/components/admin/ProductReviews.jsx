@@ -11,7 +11,7 @@ import {
   deleteReview,
   productReviews,
   resetDeleteProduct,
-} from "../../slices/productSlice";
+} from "../../slices/product.slice";
 
 const ProductReviews = () => {
   const [productId, setProductId] = useState("");

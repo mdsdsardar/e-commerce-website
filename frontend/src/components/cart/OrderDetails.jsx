@@ -1,12 +1,12 @@
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addItemToCart, removeFromCart } from "../../slices/cartSlices";
+import { addItemToCart, removeFromCart } from "../../slices/cart.slice";
 import MetaData from "../layout/MetaData";
 import { Link, useParams } from "react-router-dom";
 import { MDBDataTable } from "mdbreact";
 import Loader from "../layout/Loader";
 import toast from "react-hot-toast";
-import { orderDetails } from "../../slices/orderSlice";
+import { orderDetails } from "../../slices/order.slice";
 
 const OrderDetails = () => {
   const dispatch = useDispatch();

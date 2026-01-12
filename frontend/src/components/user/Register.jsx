@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MetaData from "../layout/MetaData";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { createUser, getAuth } from "../../slices/authSlice";
+import { createUser, getAuth } from "../../slices/auth.slice";
 
 const Register = () => {
   const navigate = useNavigate();

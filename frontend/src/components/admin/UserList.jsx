@@ -11,7 +11,7 @@ import {
   clearError,
   deleteUser,
   deleteUserReset,
-} from "../../slices/authSlice";
+} from "../../slices/auth.slice";
 import { useState } from "react";
 
 const UserList = () => {

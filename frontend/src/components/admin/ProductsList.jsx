@@ -12,7 +12,7 @@ import {
   deleteProduct,
   getAdminProducts,
   resetDeleteProduct,
-} from "../../slices/productSlice";
+} from "../../slices/product.slice";
 import Sidebar from "./Sidebar";
 import { useState } from "react";
 

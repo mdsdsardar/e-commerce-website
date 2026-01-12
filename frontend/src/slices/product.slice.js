@@ -9,38 +9,44 @@ import axios from "axios";
 export const getProducts = createAsyncThunk(
   "getProducts", // action type prefix
   async (
-    { keyword = "", currentPage = 1, price, category, rating = 0 },
+    { keyword = "", currentPage = 1, price, category, rating = 0 } = {},
     { rejectWithValue }
   ) => {
-    try {
-      let link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&ratings[gte]=${rating}`;
-      if (category) {
-        link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&category=${category}&ratings[gte]=${rating}`;
+    const maxRetries = 3;
+    const baseDelay = 1000;
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        let link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&ratings[gte]=${rating}`;
+        if (category) {
+          link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&category=${category}&ratings[gte]=${rating}`;
+        }
+        // Make API call to fetch products
+        const { data } = await axios.get(link);
+
+        // Log the response to debug
+        console.log("API Response:", data);
+
+        return data;
+      } catch (error) {
+        if (attempt === maxRetries) {
+          console.error("API Error:", error);
+          return rejectWithValue(
+            error.response?.data?.message || "Failed to load products"
+          );
+        }
+        // Exponential backoff
+        const delay = baseDelay * Math.pow(2, attempt - 1);
+        console.log(`Retry attempt ${attempt}/${maxRetries} in ${delay}ms...`);
+
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
-      // Make API call to fetch products
-      const { data } = await axios.get(link);
-
-      // Log the response to debug
-      console.log("API Response:", data);
-
-      return data; // This becomes action.payload on success
-    } catch (error) {
-      // Log error for debugging
-      console.error("API Error:", error);
-
-      // rejectWithValue allows us to return a custom error payload
-      const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        "Something went wrong";
-      return rejectWithValue(errorMessage);
     }
   }
 );
 
 export const getAdminProducts = createAsyncThunk(
   "getAdminProducts", // action type prefix
-  async ({ resPerPage, currentPage }, { rejectWithValue }) => {
+  async ({ resPerPage = 5, currentPage = 1 } = {}, { rejectWithValue }) => {
     try {
       // Make API call to fetch products
       const { data } = await axios.get(
@@ -80,6 +86,9 @@ const productSlice = createSlice({
       // Redux Toolkit uses Immer library, so we can "mutate" state directly
       // It's actually creating a new immutable state behind the scenes
       state.error = null;
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -216,7 +225,7 @@ export const updateProduct = createAsyncThunk(
       );
       // Log the response to debug
       console.log("API Response:", data);
-      return data; // This becomes action.payload on success
+      return data.success; // This becomes action.payload on success
     } catch (error) {
       // Log error for debugging
       console.error("API Error:", error);
@@ -275,7 +284,7 @@ export const productReviews = createAsyncThunk(
 );
 
 export const deleteReview = createAsyncThunk(
-  "product/deleteRseview", // action type prefix
+  "product/deleteReview", // action type prefix
   async ({ productId, id }, { rejectWithValue }) => {
     try {
       const { data } = await axios.delete(
@@ -348,6 +357,7 @@ const productDetailsSlice = createSlice({
       //Review reducer.
       .addCase(newReview.pending, (state) => {
         state.loading = true;
+        state.success = false;
       })
       .addCase(newReview.fulfilled, (state, action) => {
         state.loading = false;
@@ -358,6 +368,7 @@ const productDetailsSlice = createSlice({
       .addCase(newReview.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.success = false;
       })
       //New Product create reducer.
       .addCase(newProduct.pending, (state) => {
@@ -392,6 +403,7 @@ const productDetailsSlice = createSlice({
       //Update Product reducer.
       .addCase(updateProduct.pending, (state) => {
         state.loading = true;
+        state.isUpdated = false;
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.loading = false;
@@ -402,6 +414,7 @@ const productDetailsSlice = createSlice({
       .addCase(updateProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.isUpdated = false;
       })
       //Fetch Review reducer.
       .addCase(productReviews.pending, (state) => {
@@ -420,6 +433,7 @@ const productDetailsSlice = createSlice({
       //Delete Review reducer.
       .addCase(deleteReview.pending, (state) => {
         state.loading = true;
+        state.isDeleted = false;
       })
       .addCase(deleteReview.fulfilled, (state, action) => {
         state.loading = false;
@@ -430,12 +444,14 @@ const productDetailsSlice = createSlice({
       .addCase(deleteReview.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.isDeleted = false;
       });
   },
 });
 
 // From productSlice
-export const { clearErrors: clearProductErrors } = productSlice.actions;
+export const { setLoading, clearErrors: clearProductErrors } =
+  productSlice.actions;
 export const productReducer = productSlice.reducer;
 
 // From productDetailsSlice

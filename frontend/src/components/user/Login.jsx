@@ -4,7 +4,7 @@ import Loader from "../layout/Loader";
 import MetaData from "../layout/MetaData";
 import toast from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { getAuth } from "../../slices/authSlice";
+import { getAuth } from "../../slices/auth.slice";
 
 const Login = () => {
   const location = useLocation();
