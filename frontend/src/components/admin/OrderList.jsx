@@ -27,7 +27,6 @@ const OrderList = () => {
   useEffect(() => {
     const currentPage = paginationModel.page + 1; // Convert to 1-based for backend
     const resPerPage = paginationModel.pageSize;
-    console.log(currentPage);
     
     dispatch(allOrders({ resPerPage, currentPage }));
     if (error) {

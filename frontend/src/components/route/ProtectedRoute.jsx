@@ -1,32 +1,8 @@
-// import React, { Component, Fragment, useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { Route, Redirect } from "react-router-dom";
-
-// const ProtectedRoute = () => {
-//   const { isAuthenticated, user, loading } = useSelector((state) => state.auth);
-//   return (
-//     <Fragment>
-//       {loading === false && (
-//         <Route
-//           {...rest}
-//           render={(props) => {
-//             if (isAuthenticated === false) {
-//               return <Redirect to="/login" />;
-//             }
-//             return <Component {...props} />;
-//           }}
-//         />
-//       )}
-//     </Fragment>
-//   );
-// };
-
-// export default ProtectedRoute;
-
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
+import Loader from "../layout/Loader";
 
 const ProtectedRoute = ({ isAdmin = false }) => {
   const { isAuthenticated, loading, userLoaded, user } = useSelector(
@@ -51,6 +27,7 @@ const ProtectedRoute = ({ isAdmin = false }) => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
+          <Loader />
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           <p className="mt-4 text-gray-600">Checking authentication...</p>
         </div>

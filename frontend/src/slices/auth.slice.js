@@ -257,6 +257,9 @@ const authSlice = createSlice({
     deleteUserReset: (state) => {
       state.isDeleted = false;
     },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -400,6 +403,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { deleteUserReset, updateUserReset, clearError } =
+export const { setLoading, deleteUserReset, updateUserReset, clearError } =
   authSlice.actions;
 export const authReducer = authSlice.reducer;

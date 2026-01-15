@@ -6,7 +6,7 @@ import Header from "./components/layout/Header";
 import ProductDetails from "./components/product/ProductDetails";
 import Login from "./components/user/Login";
 import Register from "./components/user/Register";
-import { loadUser } from "./slices/auth.slice";
+import { loadUser, setLoading } from "./slices/auth.slice";
 import { useEffect } from "react";
 import Profile from "./components/user/Profile";
 import ProtectedRoute from "./components/route/ProtectedRoute";
@@ -42,6 +42,7 @@ function App() {
   const dispatch = useDispatch();
   const [stripeApiKey, setStripeApiKey] = useState("");
   useEffect(() => {
+    dispatch(setLoading(true));
     const timer = setTimeout(() => {
       dispatch(loadUser());
       axios.get("/api/v1/stripeapi").then((res) => {

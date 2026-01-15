@@ -61,16 +61,6 @@ const UpdateUser = () => {
     formData.set("role", role);
     dispatch(updateUser({ id, formData }));
   };
-  // const onChange = (e) => {
-  //   const reader = new FileReader();
-  //   reader.onload = () => {
-  //     if (reader.readyState === 2) {
-  //       setAvatarPreview(reader.result);
-  //       setAvatar(reader.result);
-  //     }
-  //   };
-  //   reader.readAsDataURL(e.target.files[0]);
-  // };
   return (
     <Fragment>
       <MetaData title={`Update User`} />

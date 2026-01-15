@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { logoutUser } from "../../slices/auth.slice";
+import Loader from "./Loader";
 
 const Header = () => {
   const dispatch = useDispatch();

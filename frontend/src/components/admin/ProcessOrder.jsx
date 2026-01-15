@@ -19,14 +19,6 @@ const ProcessOrder = () => {
   const { loading, allOrder, order, error, isUpdated } = useSelector(
     (state) => state.order
   );
-  // const {
-  //   shippingInfo,
-  //   orderItems,
-  //   paymentInfo,
-  //   user,
-  //   totalPrice,
-  //   orderStatus,
-  // } = useSelector((state) => state.product);
   const {
     shippingInfo,
     orderItems,

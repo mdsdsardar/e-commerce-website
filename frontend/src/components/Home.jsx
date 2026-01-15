@@ -37,14 +37,7 @@ const Home = () => {
     "Home",
   ];
   const { keyword } = useParams();
-  // useDispatch hook to dispatch actions
-  // const alert = useAlert();
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(getProducts());
-  // }, [dispatch]);
-  // useSelector hook to access Redux state
-  // state.products matches the key we used in store configuration
   const { products, loading, error, productsCount, resPerPage } = useSelector(
     (state) => state.products
   );
@@ -57,14 +50,8 @@ const Home = () => {
     }
     dispatch(setLoading(true));
     dispatch(getProducts({ keyword, currentPage, price, category, rating }));
-    // return () => {
-    //   dispatch(clearErrors());
-    // };
   }, [dispatch, error, keyword, currentPage, price, category, rating]);
 
-  // function setCurrentPageNo(pageNumber) {
-  //   setCurrentPageNo(pageNumber);
-  // }
   const itemsPerPage = resPerPage || 10;
   const totalItems = productsCount || 0;
   const pageCount = itemsPerPage > 0 ? Math.ceil(totalItems / itemsPerPage) : 0;
@@ -167,17 +154,6 @@ const Home = () => {
             </div>
           </section>
 
-          {/* <Pagination
-              activePage={currentPage || 1}
-              itemsCountPerPage={resPerPage || 10}
-              totalItemsCount={productsCount || 0}
-              onChange={setCurrentPageNo}
-              nextPageText={"Next"}
-              prevPageText={"Prev"}
-              firstPageText={"First"}
-              itemClass="page-item"
-              linkClass="page-link"
-            /> */}
           {resPerPage <= productsCount && (
             <div className="d-flex justify-content-center mt-5">
               <ReactPaginate

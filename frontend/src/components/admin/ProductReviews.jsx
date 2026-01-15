@@ -34,18 +34,8 @@ const ProductReviews = () => {
     }
   }, [dispatch, error, productId, isDeleted]);
   const deleteReviewHandler = (productId, id) => {
-    console.log("Deleting:", productId, id);
     dispatch(deleteReview({ productId, id }));
   };
-  // Ensure orders is an array before mapping
-  // if (!Array.isArray(reviews) || reviews.length === 0) {
-  //   return (
-  //     <div>
-  //       <h1 className="mt-5">All Reviews</h1>
-  //       <p>No Review found.</p>
-  //     </div>
-  //   );
-  // }
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(productReviews(productId));
@@ -83,16 +73,6 @@ const ProductReviews = () => {
       headerName: "User",
       flex: 1,
       minWidth: 120,
-      // renderCell: (params) => (
-      //   <p
-      //     style={{
-      //       color: params.value?.includes("Delivered") ? "green" : "red",
-      //       margin: 0,
-      //     }}
-      //   >
-      //     {params.value}
-      //   </p>
-      // ),
     },
     {
       field: "actions",
@@ -102,12 +82,6 @@ const ProductReviews = () => {
       sortable: false,
       renderCell: (params) => (
         <Fragment>
-          {/* <Link
-            to={`/admin/review/${params.row.id}`}
-            className="btn btn-primary py-1 px-2"
-          >
-            <i className="fa fa-pencil"></i>
-          </Link> */}
           <button
             className="btn btn-danger py-1 px-2 ml-2"
             onClick={() => deleteReviewHandler(productId, params.row.id)}

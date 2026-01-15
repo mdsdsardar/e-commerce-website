@@ -21,8 +21,6 @@ const ListOrders = () => {
     }
   }, [dispatch, toast, error]);
 
-  console.log("Orders received:", orders); // Debug log
-
  // Ensure orders is an array before mapping
   if (!Array.isArray(orders) || orders.length === 0) {
     return (
@@ -40,8 +38,6 @@ const ListOrders = () => {
     status: order.orderStatus,
     orderId: order._id, // Keep original ID for actions
   }));
-
-  console.log("Mapped rows:", rows); // Debug log
 
   const columns = [
     {
@@ -122,76 +118,5 @@ const ListOrders = () => {
     </Fragment>
   );
 };
-
-//   const setOrders = () => {
-//     const data = {
-//       columns: [
-//         {
-//           label: "Order ID",
-//           field: "id",
-//           sort: "asc",
-//         },
-//         {
-//           label: "Num of Items",
-//           field: "numOfItems",
-//           sort: "asc",
-//         },
-//         {
-//           label: "Amount",
-//           field: "amount",
-//           sort: "asc",
-//         },
-//         {
-//           label: "Status",
-//           field: "status",
-//           sort: "asc",
-//         },
-//         {
-//           label: "Actions",
-//           field: "actions",
-//           sort: "asc",
-//         },
-//       ],
-//       rows: [],
-//     };
-//     orders.forEach((order) => {
-//       data.rows.push({
-//         id: order._id,
-//         numOfItems: order.orderItems.length,
-//         amount: `$${order.totalPrice}`,
-//         status:
-//           order.orderStatus &&
-//           String(order.orderStatus).includes("Delivered") ? (
-//             <p style={{ color: "green" }}>{order.orderStatus}</p>
-//           ) : (
-//             <p style={{ color: "red" }}>{order.orderStatus}</p>
-//           ),
-//         actions: (
-//           <Link to={`/order/${order._id}`} className="btn btn-primary">
-//             <i className="fa fa-eye"></i>
-//           </Link>
-//         ),
-//       });
-//     });
-//     return data;
-//   };
-//   return (
-//     <Fragment>
-//       <MetaData title={"My orders"} />
-//       <h1 className="mt-5">My Orders</h1>
-//       {loading ? (
-//         <Loader />
-//       ) : (
-//         <MDBDataTable
-//           data={setOrders()}
-//           className="px-3"
-//           bordered
-//           striped
-//           hover
-//         />
-//       )}
-//     </Fragment>
-//   );
-// };
 
 export default ListOrders;
