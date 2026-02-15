@@ -151,7 +151,7 @@ Fetch id from input, Fetch specific review using it's id & then return data.revi
 ## deleteReview:
 Fetch productID an id from input, MakeAPI call to delete that specific review from product & return data.success. Keep isDeleted value as false in pending/rejected state, but in fulfilled state assign it as action.payload.
 
-###### Logic In component: Pending.
+###### Logic In component:
 Most of the frontend input either we will get from URL/From form, for form related input must use useState.
 useState can keep single value OR multiple value which later either we can destructure or call it like user.name.
 Then we will fetch multiple state values from Redux store, page rerender whenever it observed changes in store value & we have utilise this function very heavily in our frontEnd logic. It's value can change Dispatch of thunk.
